@@ -1,3 +1,4 @@
+.env
 .flaskenv
 venv
 .vscode
