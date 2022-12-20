@@ -40,3 +40,10 @@ class UserLogin(MethodView):
             refresh_token = create_refresh_token(identity=user.id)
             return {"access_token": access_token, "refresh_token": refresh_token}
         abort(401, message="Invalid credentials.")
+
+@blp.route("/user/<string:user_id>")
+class User(MethodView):
+    @blp.response(200, UserSchema)
+    def get(self, user_id):
+        user = UserModel.query.get_or_404(user_id)
+        return user
