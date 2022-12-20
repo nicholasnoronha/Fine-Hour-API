@@ -16,7 +16,8 @@ class PlainTaskSchema(Schema):
 
 
 class UserSchema(PlainUserSchema):
-    tasks = fields.Nested(PlainTaskSchema(), dump_only=True)
+    tasks = fields.List(fields.Nested(PlainTaskSchema(), dump_only=True))
 
 class TaskSchema(PlainTaskSchema):
     user_id = fields.Int(required=True, load_only=True)
+    user = fields.Nested(PlainUserSchema(), dump_only=True)
