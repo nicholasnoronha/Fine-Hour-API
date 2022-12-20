@@ -10,6 +10,7 @@ from db import db
 import models #!
 
 from resources.user import blp as UserBlueprint
+from resources.task import blp as TaskBlueprint
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -37,5 +38,6 @@ def create_app(db_url=None):
         db.create_all()
 
     api.register_blueprint(UserBlueprint)
-
+    api.register_blueprint(TaskBlueprint)
+    
     return app
