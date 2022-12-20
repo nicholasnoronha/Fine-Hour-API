@@ -15,8 +15,11 @@ class Task(MethodView):
     def post(self, task_data):
         task = TaskModel(**task_data)
         try:
+            print('Aqui')
             db.session.add(task)
+            print('Bqui')
             db.session.commit()
+            print('Cqui')
         except SQLAlchemyError:
             print(SQLAlchemyError)
             abort(500, message="An error occurred while creating the task.")
@@ -32,7 +35,7 @@ class TaskList(MethodView):
 
 @blp.route("/user/<string:user_id>/task")
 class TasksOnUser(MethodView):
-    @blp.response(200, TaskSchema)
+    @blp.response(200, TaskSchema(many=True))
     def get(self, user_id):
-        task = TaskModel.query.get_or_404(user_id)
+        task = TaskModel.query.filter_by(user_id=user_id).all()
         return task
