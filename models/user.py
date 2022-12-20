@@ -9,3 +9,6 @@ class UserModel(db.Model):
     email = db.Column(db.String(80), unique=True, nullable=False)
     qtd_horas = db.Column(db.Integer)
     valor_horas = db.Column(db.Float(2))
+    tasks = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    tasks = db.relationship("TaskModel", back_populates="users")
