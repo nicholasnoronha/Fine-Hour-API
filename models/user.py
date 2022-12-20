@@ -4,11 +4,10 @@ class UserModel(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    name = db.Column(db.String(256))
     password = db.Column(db.String(256), nullable=False)
-    email = db.Column(db.String(80), unique=True, nullable=False)
-    qtd_horas = db.Column(db.Integer)
+    email = db.Column(db.String(256), unique=True, nullable=False)
+    qtd_horas = db.Column(db.Float(2))
     valor_horas = db.Column(db.Float(2))
-    tasks = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    tasks = db.relationship("TaskModel", back_populates="users")
+    tasks = db.relationship("TaskModel", back_populates="user", lazy="dynamic")
