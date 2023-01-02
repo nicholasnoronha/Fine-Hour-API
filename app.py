@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
@@ -36,6 +36,18 @@ def create_app(db_url=None):
 
     with app.app_context():
         db.create_all()
+
+    @jwt.unauthorized_loader
+    def missing_token_callback(error):
+        return(
+            jsonify(
+                {
+                    "description": "Request does not contain an access token.",
+                    "error": "authorization_required"
+                },
+                401
+            )
+        )
 
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(TaskBlueprint)
