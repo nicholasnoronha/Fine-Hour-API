@@ -21,3 +21,7 @@ class UserSchema(PlainUserSchema):
 class TaskSchema(PlainTaskSchema):
     user_id = fields.Int(required=True, load_only=True)
     user = fields.Nested(PlainUserSchema(), dump_only=True)
+
+class JtiSchema(Schema):
+    id = fields.Int(dump_only=True)
+    jti = fields.String()
