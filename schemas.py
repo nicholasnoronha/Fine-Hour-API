@@ -24,4 +24,4 @@ class TaskSchema(PlainTaskSchema):
 
 class JtiSchema(Schema):
     id = fields.Int(dump_only=True)
-    jti = fields.String()
+    token_jti = fields.String()

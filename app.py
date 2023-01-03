@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from db import db
 # from blocklist import BLOCKLIST #! need column 'insert only'
 import models #!
+from models import BlocklistModel
 
 from resources.user import blp as UserBlueprint
 from resources.task import blp as TaskBlueprint
@@ -36,6 +37,30 @@ def create_app(db_url=None):
 
     with app.app_context():
         db.create_all()
+
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blocklist(jwt_header, jwt_payload):
+        jti = jwt_payload["jti"]
+
+        try:
+            blocklist_token = BlocklistModel.query.filter(BlocklistModel.token_jti == jti).first()
+            if not blocklist_token:
+                return False
+            else:
+                if blocklist_token.token_jti == jti:
+                    return True
+                else:
+                    return False
+        except:
+            return {"error": "Something went wrong."}
+
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        return(
+            jsonify(
+                {"description": "The token has been revoked.", "error": "token_revoked"}
+            )
+        )
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
