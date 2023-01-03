@@ -17,13 +17,9 @@ class Task(MethodView):
     def post(self, task_data):
         task = TaskModel(**task_data)
         try:
-            print('Aqui')
             db.session.add(task)
-            print('Bqui')
             db.session.commit()
-            print('Cqui')
         except SQLAlchemyError:
-            print(SQLAlchemyError)
             abort(500, message="An error occurred while creating the task.")
         return {"message": "Task created successfully.", "task": task_data}, 201
 
