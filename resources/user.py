@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt, get_jwt_identity
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
@@ -57,6 +57,14 @@ class user_logout(MethodView):
             abort(500, message="An error occurred while inserting the jti into the database.")
         
         return {"message": "Successfully logged out."}
+
+@blp.route("/refresh")
+class TokenRefresh(MethodView):
+    @jwt_required(refresh=True)
+    def post(self):
+        current_user = get_jwt_identity()
+        new_token = create_access_token(identity=current_user, fresh=False)
+        return {"access_token": new_token}
 
 @blp.route("/user/<string:user_id>")
 class User(MethodView):

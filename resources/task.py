@@ -12,7 +12,7 @@ blp = Blueprint("Tasks", __name__, description="Operations on tasks.")
 
 @blp.route("/task")
 class Task(MethodView):
-    @jwt_required()
+    @jwt_required(fresh=True)
     @blp.arguments(TaskSchema)
     def post(self, task_data):
         task = TaskModel(**task_data)
